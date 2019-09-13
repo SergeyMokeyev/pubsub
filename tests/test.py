@@ -1,7 +1,9 @@
 import asyncio
+import logging
 from pubsub.message import Message, MessageStatus
 from pubsub.pubsub import PubSub
 
+logging.basicConfig(level=logging.INFO)
 
 class CreateTask(Message):
     async def do_something(self):
@@ -37,8 +39,17 @@ async def service3():
         print('service3 receive success: ', msg, msg.id, msg.data, '\n')
 
 
+async def service4_logger():
+    pubsub = await PubSub.connect('localhost:9092')
+
+    async for msg in pubsub.receive(CreateTask, status=MessageStatus.Success):
+        logging.info('Message %s change status to %s', str(msg.id), msg.status.value)
+
+
+
 loop = asyncio.get_event_loop()
 loop.create_task(service1())
 loop.create_task(service2())
 loop.create_task(service3())
+loop.create_task(service4_logger())
 loop.run_forever()
