@@ -13,6 +13,10 @@ class CreateTask(Message):
         self.status = MessageStatus.Success
 
 
+class OtherMessage(Message):
+    pass
+
+
 async def service1():
     pubsub = await PubSub.connect('localhost:9092')
 
@@ -44,7 +48,7 @@ async def service3():
 async def service4_logger():
     pubsub = await PubSub.connect('localhost:9092')
 
-    async for msg in pubsub.receive(CreateTask, status=[MessageStatus.Success, MessageStatus.New]):
+    async for msg in pubsub.receive(CreateTask, OtherMessage, status=[MessageStatus.Success, MessageStatus.New]):
         logging.info('Message %s change status to %s', str(msg.id), msg.status.value)
 
 
