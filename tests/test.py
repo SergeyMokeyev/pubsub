@@ -1,5 +1,6 @@
 import asyncio
 import logging
+import datetime
 from pubsub.message import Message, MessageStatus
 from pubsub.pubsub import ApacheKafkaPubSub
 
@@ -21,7 +22,7 @@ async def service1():
     pubsub = ApacheKafkaPubSub('localhost:9092')
 
     while True:
-        msg = CreateTask({'test': 'ok'})
+        msg = CreateTask({'date': datetime.datetime.utcnow(), 'test1': [datetime.datetime.utcnow()], 'test2': {'date2': datetime.datetime.utcnow()}})
 
         await asyncio.sleep(2)
 
