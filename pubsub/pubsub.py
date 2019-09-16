@@ -24,7 +24,8 @@ class PubSub:
     async def send(self, message: Message) -> None:
         await self.producer.send('message', json.dumps(message.serialize()).encode())
 
-    async def receive(self, *args: typing.Type[Message], status: MessageStatus = None):
+    async def receive(self, *args: typing.Type[Message],
+                      status: typing.Union[MessageStatus, typing.List[MessageStatus]] = None):
         statuses = (n for n in MessageStatus) if not status else status if isinstance(status, Iterable) else (status,)
         async for msg in self.consumer:
             try:
