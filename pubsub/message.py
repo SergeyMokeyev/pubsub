@@ -14,6 +14,7 @@ class MessageMeta(type):
 
     def __new__(mcs, name, bases, dct):
         cls = super().__new__(mcs, name, bases, dct)
+        cls.channel = cls
         MessageMeta.__classes.update({dct['__qualname__']: cls})
         return cls
 
