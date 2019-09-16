@@ -22,7 +22,6 @@ class MessageMeta(type):
 class Message(metaclass=MessageMeta):
     def __init__(self, data: typing.Any = None, *, status: MessageStatus = None):
         self.id = uuid.uuid4()
-        self.channel = self.__class__
         self.status = status or MessageStatus.New
         self.data = data
 
@@ -37,6 +36,6 @@ class Message(metaclass=MessageMeta):
     @staticmethod
     def deserialize(data) -> 'Message':
         cls = MessageMeta._MessageMeta__classes[data['channel']]
-        inst = cls(data.get('data'), status=MessageStatus(data.get('status')))
-        inst.id = uuid.UUID(data.get('id')) or inst.id
+        inst = cls(data['data'], status=MessageStatus(data['status']))
+        inst.id = uuid.UUID(data['id'])
         return inst
